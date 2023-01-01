@@ -1,78 +1,17 @@
-const express = require('express');
-const app = express();
 
-const storeRoute = express.Router();
-let Store = require('../models/Store');
+module.exports = app => {
 
-// Add Store
-storeRoute.route('/add-store').post((req, res, next) => {
+	const stores = require("../controllers/store.controller.js");
+	var router = require("express").Router();
+
+	router.post("/", stores.create);
+	router.get("/", stores.findAll);
+	router.get("/published", stores.findAllPublished);
+	router.get("/:id", stores.findOne);
+	router.put("/:id", stores.update);
+	router.delete("/:id", stores.delete);
+	router.delete("/", stores.deleteAll);
 	
-	Store.create(req.body, (error, data) => {
-		if (error) {
-			return next(error)
-		} else {
-			res.json(data)
-		}
-	})
-	
-});
+	app.use('/api/stores', router);
 
-// Get all Store
-storeRoute.route('/').get((req, res) => {
-	
-	Store.find((error, data) => {
-		if (error) {
-			return next(error)
-		} else {
-			res.json(data)
-		}
-	})
-	
-})
-
-// Get Store
-storeRoute.route('/read-store/:id').get((req, res) => {
-
-	Store.findById(req.params.id, (error, data) => {
-		if (error) {
-			return next(error)
-		} else {
-			res.json(data)
-		}
-	})
-
-})
-
-// Update Store
-storeRoute.route('/update-store/:id').put((req, res, next) => {
-
-	Store.findByIdAndUpdate(req.params.id, {
-		$set: req.body
-	}, (error, data) => {
-		if (error) {
-			return next(error);
-			console.log(error)
-		} else {
-			res.json(data)
-			console.log('Store updated successfully!')
-		}
-	})
-
-})
-
-// Delete Store
-storeRoute.route('/delete-store/:id').delete((req, res, next) => {
-
-	Store.findByIdAndRemove(req.params.id, (error, data) => {
-		if (error) {
-			return next(error);
-		} else {
-			res.status(200).json({
-				msg: data
-			})
-		}
-	})
-
-})
-
-module.exports = storeRoute;
+};
