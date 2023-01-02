@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 let Store = new Schema({
@@ -8,7 +9,15 @@ let Store = new Schema({
 	lng: {type: String},
 	description: {type: String}
 }, {
-	collection: 'stores'
+	collection: 'stores',
+	timestamps: true 
 })
+
+Store.method("toJSON", function() {
+	const { __v, _id, ...object } = this.toObject();
+	object.id = _id;
+	return object;
+});
+
 
 module.exports = mongoose.model('Store', Store)
