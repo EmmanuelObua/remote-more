@@ -33,6 +33,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 require('./routes/store.routes')(app);
+require('./routes/product.routes')(app);
 
 const port = process.env.PORT || 8000;
 
