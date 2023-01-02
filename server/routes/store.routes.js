@@ -7,11 +7,12 @@ module.exports = app => {
 	router.post("/", stores.create);
 	router.get("/", stores.findAll);
 	router.get("/published", stores.findAllPublished);
+	router.get("/:id/products", stores.findProducts);
 	router.get("/:id", stores.findOne);
 	router.put("/:id", stores.update);
 	router.delete("/:id", stores.delete);
 	router.delete("/", stores.deleteAll);
-	
+
 	app.use('/api/stores', router);
 
 };
