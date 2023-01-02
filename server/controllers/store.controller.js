@@ -1,4 +1,5 @@
 const Store = require("../models/Store.js");
+const Product = require("../models/Product.js");
 
 const NodeGeocoder = require('node-geocoder');
 
@@ -40,6 +41,18 @@ exports.create = async (req, res) => {
 		});
 };
 
+exports.findProducts = (req, res) => {
+
+	Product.find({storeId : req.params.id}).then(data=>{
+		res.send(data)
+	}).catch(err => {
+		res.status(500).send({
+			message:
+			err.message || "Some error occurred while retrieving store products."
+		});
+	});
+	
+}	
 
 exports.findAll = (req, res) => {
 
