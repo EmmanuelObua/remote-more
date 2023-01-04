@@ -1,6 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { HttpClient, HttpResponse } from '@angular/common/http';
+
 import {StoreService} from '../../services/stores/store.service'
 import { FormGroup, FormBuilder } from "@angular/forms";
 
@@ -13,13 +15,14 @@ import { FormGroup, FormBuilder } from "@angular/forms";
 export class AddStoreComponent {
 
 	storeForm: FormGroup;
-	 
+
 	constructor(
 		public formBuilder: FormBuilder,
 		private router: Router,
 		private ngZone: NgZone,
-		private storeService: StoreService
-	) { 
+		private storeService: StoreService,
+		private httpClient: HttpClient
+		) { 
 
 		this.storeForm = this.formBuilder.group({
 			name: [''],
@@ -28,18 +31,20 @@ export class AddStoreComponent {
 		})
 		
 	}
- 
-	ngOnInit() { }
- 
+
+	ngOnInit() {}
+
 	onSubmit(): any {
 
+
 		this.storeService.AddStore(this.storeForm.value)
-				.subscribe(() => {
-						console.log('Data added successfully!')
-						this.ngZone.run(() => this.router.navigateByUrl('/'))
-					}, (err) => {
-						console.log(err);
-				});
+		.subscribe(() => {
+			console.log('Data added successfully!')
+			this.storeForm.reset();
+			this.ngZone.run(() => this.router.navigateByUrl('/add-store'))
+		}, (err) => {
+			console.log(err);
+		});
 	}
 
 }
