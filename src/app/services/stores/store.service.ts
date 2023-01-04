@@ -20,8 +20,11 @@ export class StoreService {
 		return this.httpClient.post(API_URL, data).pipe(catchError(this.handleError))
 	}
 
-	GetStores() {
-		return this.httpClient.get(`${this.REST_API}`);
+	GetStores(data?: any) {
+
+		let API_URL = data ? `${this.REST_API}?lat=${data.lat}&lng=${data.lng}` : `${this.REST_API}`
+		return this.httpClient.get(API_URL);
+
 	}
 
 	GetStore(id:any): Observable<any> {

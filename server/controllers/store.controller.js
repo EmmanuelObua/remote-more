@@ -57,6 +57,27 @@ exports.findProducts = (req, res) => {
 
 exports.findAll = (req, res) => {
 
+	if(req.query.lat) {
+		Store.find({
+			"location": {
+				$near: {
+					$geometry: {
+						type: "Point" ,
+						coordinates: [ Number(req.query.lat) , Number(req.query.lng) ]
+					},
+				}
+			}
+		}).then(data => {
+			res.send(data);
+		})
+		.catch(err => {
+			res.status(500).send({
+				message:
+				err.message || "Some error occurred while retrieving stores."
+			});
+		});
+	}
+
 	const name = req.query.name;
 
 	var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
