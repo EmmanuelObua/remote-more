@@ -4,9 +4,9 @@ const Product = require("../models/Product.js");
 const NodeGeocoder = require('node-geocoder');
 
 const options = {
-  provider: 'google',
-  apiKey: 'AIzaSyBbn-F65G6we2tploFH1xPQEYdnw_DgQ0g',
-  formatter: null
+	provider: 'google',
+	apiKey: 'AIzaSyBbn-F65G6we2tploFH1xPQEYdnw_DgQ0g',
+	formatter: null
 };
 
 const geocoder = NodeGeocoder(options);
@@ -19,26 +19,27 @@ exports.create = async (req, res) => {
 	}
 
 	const googleRes = await geocoder.geocode(req.body.address);
+
+	const location = { type: 'Point', coordinates: [googleRes[0].latitude, googleRes[0].longitude] };
 	
 	const storeObj = new Store({
 		name: req.body.name,
 		address: req.body.address,
-		lat: googleRes[0].latitude,
-		lng: googleRes[0].longitude,
+		location:location,
 		description: req.body.description
 	});
 	
 	storeObj
-		.save(storeObj)
-		.then(data => {
-			res.send(data);
-		})
-		.catch(err => {
-			res.status(500).send({
-				message:
-				err.message || "Some error occurred while creating the store."
-			});
+	.save(storeObj)
+	.then(data => {
+		res.send(data);
+	})
+	.catch(err => {
+		res.status(500).send({
+			message:
+			err.message || "Some error occurred while creating the store."
 		});
+	});
 };
 
 exports.findProducts = (req, res) => {
