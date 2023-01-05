@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
 
 	const googleRes = await geocoder.geocode(req.body.address);
 
-	const location = { type: 'Point', coordinates: [googleRes[0].latitude, googleRes[0].longitude] };
+	const location = { type: 'Point', coordinates: [googleRes[0].longitude, googleRes[0].latitude] };
 	
 	const storeObj = new Store({
 		name: req.body.name,
@@ -63,7 +63,7 @@ exports.findAll = (req, res) => {
 				$near: {
 					$geometry: {
 						type: "Point" ,
-						coordinates: [ Number(req.query.lat) , Number(req.query.lng) ]
+						coordinates: [ Number(req.query.lng), Number(req.query.lat) ]
 					},
 				}
 			}
